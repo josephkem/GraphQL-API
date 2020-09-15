@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const colors = require("colors");
 
 module.exports.connection = async () => {
   try {
@@ -7,7 +8,7 @@ module.exports.connection = async () => {
       useUnifiedTopology: true,
     });
 
-    console.log("Database Connection Successful");
+    console.log("Database Connection Successful".cyan.underline.bold);
   } catch (err) {
     console.log(err);
   }
