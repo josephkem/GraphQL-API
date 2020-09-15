@@ -3,6 +3,8 @@ const { ApolloServer, gql } = require("apollo-server-express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
+const { tasks, users } = require("./constants/index");
+
 //Set env variables
 dotenv.config();
 
@@ -17,6 +19,10 @@ app.use(express.json());
 const typeDefs = gql`
   type Query {
     greetings: String!
+    tasks: [Task!]
+    task(id: ID!): Task
+    users: [User!]
+    user(id: ID!): User
   }
 
   type User {
@@ -36,6 +42,24 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     greetings: () => "",
+    tasks: () => {
+      console.log(tasks);
+      return tasks;
+    },
+    task: (_, { id }) => tasks.find((task) => task.id === id),
+
+    users: () => users,
+    user: (_, { id }) => users.find((users) => user.id === id),
+  },
+  Task: {
+    user: ({ userId }) => {
+      console.log("userId", userId);
+      return users.find((user) => user.id === userId);
+    },
+  },
+
+  User: {
+    tasks: ({ id }) => tasks.find((task) => task.id === id),
   },
 };
 
