@@ -8,7 +8,7 @@ module.exports.connection = async () => {
       useUnifiedTopology: true,
     });
 
-    console.log("Database Connection Successful".cyan.underline.bold);
+    console.log("Database Connection Successful...".cyan.underline.bold);
   } catch (err) {
     console.log(err);
   }
