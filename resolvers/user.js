@@ -16,7 +16,7 @@ module.exports = {
         const user = await User.findOne({ email: input.email });
 
         if (user) {
-          throw new Error("Email already in use");
+          throw new Error("Email already in use".red.inverse);
         }
         const hashedPassword = await bcrypt.hash(input.password, 12);
         const newUser = new User({ ...input, password: hashedPassword });
@@ -31,7 +31,7 @@ module.exports = {
         const user = await User.findOne({ email: input.email });
 
         if (!user) {
-          throw new Error("User not found");
+          throw new Error("User not found".brightRed);
         }
 
         const isPasswordValid = await bcrypt.compare(
@@ -39,7 +39,7 @@ module.exports = {
           user.password
         );
         if (!isPasswordValid) {
-          throw new Error("Incorrect Password");
+          throw new Error("Incorrect Password".brightRed);
         }
         const secret = process.env.JWT_SECRET_KEY || "mysecretkey";
         const token = jwt.sign({ email: user.email }, secret, {
