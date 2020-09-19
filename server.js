@@ -3,6 +3,7 @@ const { ApolloServer, gql } = require("apollo-server-express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const { connection } = require("./database/utils");
+const { verifyUser } = require("./helper/context/index");
 
 const resolvers = require("./resolvers/index");
 const typeDefs = require("./typeDefs/index");
@@ -26,9 +27,11 @@ app.use(express.json());
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: () => {
+  context: async ({ req }) => {
+    await verifyUser(req);
+    console.log("context ran===");
     return {
-      email: "test@gmail.com" + Math.random(),
+      email: req.email,
     };
   },
 });

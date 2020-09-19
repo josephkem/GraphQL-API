@@ -9,7 +9,7 @@ module.exports = {
     users: () => users,
     user: (_, { id }, { email }) => {
       console.log("===", email);
-      users.find((user) => user.id === id);
+      return users.find((user) => user.id === id);
     },
   },
 
