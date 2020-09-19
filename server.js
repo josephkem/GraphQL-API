@@ -26,6 +26,11 @@ app.use(express.json());
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
+  context: () => {
+    return {
+      email: "test@gmail.com" + Math.random(),
+    };
+  },
 });
 
 apolloServer.applyMiddleware({ app, path: "/graphql" });

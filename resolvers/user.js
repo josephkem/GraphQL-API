@@ -7,7 +7,10 @@ const jwt = require("jsonwebtoken");
 module.exports = {
   Query: {
     users: () => users,
-    user: (_, { id }) => users.find((user) => user.id === id),
+    user: (_, { id }, { email }) => {
+      console.log("===", email);
+      users.find((user) => user.id === id);
+    },
   },
 
   Mutation: {
