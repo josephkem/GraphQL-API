@@ -3,14 +3,16 @@ const User = require("../database/models/users");
 const colors = require("colors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { combineResolvers } = require("graphql-resolvers");
+const { isAuthenticated } = require("./middleware/index");
 
 module.exports = {
   Query: {
     users: () => users,
-    user: (_, { id }, { email }) => {
+    user: combineResolvers(isAuthenticated, (_, { id }, { email }) => {
       console.log("===", email);
       return users.find((user) => user.id === id);
-    },
+    }),
   },
 
   Mutation: {
