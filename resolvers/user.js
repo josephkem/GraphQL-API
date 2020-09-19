@@ -1,5 +1,6 @@
 const { users, tasks } = require("../constants/index");
 const User = require("../database/models/users");
+const Task = require("../database/models/tasks");
 const colors = require("colors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -8,10 +9,17 @@ const { isAuthenticated } = require("./middleware/index");
 
 module.exports = {
   Query: {
-    users: () => users,
-    user: combineResolvers(isAuthenticated, (_, { id }, { email }) => {
-      console.log("===", email);
-      return users.find((user) => user.id === id);
+    user: combineResolvers(isAuthenticated, async (_, __, { email }) => {
+      try {
+        const user = await User.findOne({ email });
+        if (!user) {
+          throw new Error("User not found");
+        }
+        return user;
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
     }),
   },
 
@@ -58,6 +66,14 @@ module.exports = {
   },
 
   User: {
-    tasks: ({ id }) => tasks.filter((task) => task.id === id),
+    tasks: async ({ id }) => {
+      try {
+        const tasks = await Task.find({ user: id });
+        return tasks;
+      } catch (err) {
+        console.log(err);
+        throw err;
+      }
+    },
   },
 };
